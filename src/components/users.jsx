@@ -33,11 +33,14 @@ const Users = () => {
     return userName;
   };
 
-  const getQualities = () => {};
+  const getQualities = () => {
+    console.log(`temp `, temp);
+  };
 
   const handeleDel = (userItem) => {
     setUsers((prevState) => prevState.filter((id) => id._id !== userItem._id));
     showTable();
+    getQualities();
   };
 
   const setQuantityPeople = () => {
