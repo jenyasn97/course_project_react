@@ -4,43 +4,9 @@ import api from "../api";
 const Users = () => {
   const [users, setUsers] = useState(api.users.fetchAll());
 
-  const showUser = () => {
-    const userName = users.map((user) => {
-      return (
-        <tr key={user._id}>
-          <td>{user.name}</td>
-          <td>
-            {user.qualities.map((item) => {
-              return (
-                <span className={`badge bg-${item.color} m-1`}>
-                  {item.name}
-                </span>
-              );
-            })}
-          </td>
-          <td>{user.profession.name}</td>
-          <td>{user.completedMeetings}</td>
-          <td>{user.rate}/5</td>
-          <td>
-            <button className="btn btn-danger" onClick={() => handeleDel(user)}>
-              Delete
-            </button>
-          </td>
-        </tr>
-      );
-    });
-
-    return userName;
-  };
-
-  const getQualities = () => {
-    console.log(`temp `, temp);
-  };
-
   const handeleDel = (userItem) => {
-    setUsers((prevState) => prevState.filter((id) => id._id !== userItem._id));
+    setUsers(users.filter((id) => id._id !== userItem._id));
     showTable();
-    getQualities();
   };
 
   const setQuantityPeople = () => {
@@ -58,6 +24,21 @@ const Users = () => {
       return `bg-danger`;
     }
   };
+  const showTitle = () => {
+    if (users.length >= 1) {
+      return (
+        <div className={`badge ${setClassBadgeTitle()} fs-3 m-1`}>{`${
+          users.length
+        } ${setQuantityPeople()} тусанет с тобой сегодня`}</div>
+      );
+    } else {
+      return (
+        <div className={`badge ${setClassBadgeTitle()} fs-3 m-1`}>
+          Никто с тобой не тусанет
+        </div>
+      );
+    }
+  };
 
   const showTable = () => {
     if (users.length <= 1) {
@@ -67,9 +48,7 @@ const Users = () => {
 
   return (
     <>
-      <div className={`badge ${setClassBadgeTitle()} fs-3 m-1`}>{`${
-        users.length
-      } ${setQuantityPeople()} тусанет с тобой сегодня`}</div>
+      {showTitle()}
       <table className="table fs-5">
         <thead>
           <tr>
@@ -81,9 +60,31 @@ const Users = () => {
               Оценка
             </th>
           </tr>
-        </thead>
+        </thead> 
         <tbody>
-          <>{showUser()}</>
+          {users.map((user) => {
+            return (<tr key={user._id}>
+              <td>{user.name}</td>
+              <td>
+                {user.qualities.map((item) => {
+                 return <span key={item._id} className={`badge bg-${item.color} m-1`}>
+                    {item.name}
+                  </span>;
+                })}
+              </td>
+              <td>{user.profession.name}</td>
+              <td>{user.completedMeetings}</td>
+              <td>{user.rate} /5</td>
+              <td>
+                <button
+                  className="btn btn-danger"
+                  onClick={() => handeleDel(user)}
+                >
+                  Delete
+                </button>
+              </td>
+            </tr>);
+          })}
         </tbody>
       </table>
     </>
